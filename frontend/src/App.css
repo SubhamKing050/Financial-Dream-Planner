@@ -1,0 +1,549 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #17202a;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+.app {
+    min-height: 100vh;
+}
+
+.header {
+    background: #17202a;
+    color: white;
+    padding: 28px 20px;
+}
+
+.header-content {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.header h1 {
+    margin: 0 0 6px;
+    font-size: 30px;
+}
+
+.header p {
+    margin: 0;
+    color: #bdc3c7;
+    font-size: 15px;
+}
+
+.header-badge {
+    padding: 9px 15px;
+    border: 1px solid #566573;
+    border-radius: 20px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.main-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 35px 20px 50px;
+}
+
+.input-section,
+.results-section {
+    background: white;
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    margin-bottom: 25px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 28px;
+}
+
+.section-heading > span {
+    font-size: 13px;
+    font-weight: bold;
+    color: #7f8c8d;
+    padding-top: 5px;
+}
+
+.section-heading h2 {
+    margin: 0 0 6px;
+    font-size: 23px;
+}
+
+.section-heading p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label,
+.goal-input label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.form-group input,
+.form-group select,
+.goal-input input {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #d5d8dc;
+    border-radius: 8px;
+    outline: none;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.goal-input input:focus {
+    border-color: #34495e;
+}
+
+.goals-heading {
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.goals-heading h3 {
+    margin: 0 0 5px;
+    font-size: 17px;
+}
+
+.goals-heading p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 13px;
+}
+
+.goals-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.goal-input {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    border: 1px solid #e5e7e9;
+    border-radius: 10px;
+    background: #fafafa;
+}
+
+.goal-icon,
+.recommendation-icon,
+.ai-icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    background: #17202a;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.recommendation-icon {
+    overflow: hidden;
+    padding: 0;
+    background: transparent;
+    border-radius: 10px;
+}
+
+.recommendation-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.goal-image {
+    width: 155px;
+    height: 140px;
+    min-width: 50px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.ai-icon {
+    overflow: hidden;
+    padding: 0;
+}
+
+.ai-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.year-input {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 7px;
+}
+
+.year-input input {
+    width: 70px;
+}
+
+.year-input span {
+    color: #7f8c8d;
+    font-size: 13px;
+}
+
+.generate-button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 14px;
+    border: none;
+    border-radius: 9px;
+    background: #17202a;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.generate-button:hover {
+    background: #273746;
+}
+
+.generate-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.results-section {
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.result-card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
+}
+
+.summary-grid .result-card {
+    margin-bottom: 0;
+}
+
+.card-label {
+    display: block;
+    font-size: 12px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 9px;
+}
+
+.result-card h3 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.result-card p {
+    color: #7f8c8d;
+    font-size: 13px;
+    margin-bottom: 0;
+}
+
+.card-title-row {
+    margin-bottom: 20px;
+}
+
+.card-title-row h3 {
+    font-size: 19px;
+}
+
+.feasibility-card {
+    border-left: 5px solid #17202a;
+}
+
+.feasibility-card.status-achievable {
+    border-left-color: #27ae60;
+}
+
+.feasibility-card.status-challenging {
+    border-left-color: #f39c12;
+}
+
+.feasibility-card.status-high {
+    border-left-color: #c0392b;
+}
+
+.feasibility-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.status-badge {
+    padding: 8px 13px;
+    border-radius: 20px;
+    background: #f2f3f4;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.status-achievable .status-badge {
+    background: #eafaf1;
+    color: #1e8449;
+}
+
+.status-challenging .status-badge {
+    background: #fef5e7;
+    color: #b9770e;
+}
+
+.status-high .status-badge {
+    background: #fdedec;
+    color: #922b21;
+}
+
+.feasibility-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.feasibility-item {
+    padding: 15px;
+    background: #f8f9f9;
+    border-radius: 9px;
+}
+
+.feasibility-item span {
+    display: block;
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-bottom: 7px;
+}
+
+.feasibility-item strong {
+    font-size: 16px;
+}
+
+.feasibility-message {
+    margin-top: 18px;
+    padding-top: 15px;
+    border-top: 1px solid #ecf0f1;
+}
+
+.goals-result-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.goal-result {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid #e5e7e9;
+    border-radius: 10px;
+}
+
+.goal-result-info h4 {
+    margin: 0;
+    text-transform: capitalize;
+    font-size: 16px;
+}
+
+.goal-result-info p {
+    margin: 4px 0 8px;
+}
+
+.goal-result-info strong {
+    font-size: 17px;
+}
+
+.investment-list {
+    border-top: 1px solid #ecf0f1;
+}
+
+.investment-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid #ecf0f1;
+    text-transform: capitalize;
+}
+
+.investment-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding: 16px;
+    background: #17202a;
+    color: white;
+    border-radius: 9px;
+    font-weight: bold;
+}
+
+.recommendation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recommendation-item {
+    display: flex;
+    gap: 14px;
+    padding: 15px;
+    border: 1px solid #e5e7e9;
+    border-radius: 10px;
+}
+
+.recommendation-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.recommendation-top h4 {
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.recommendation-top span {
+    padding: 4px 8px;
+    background: #f2f3f4;
+    border-radius: 10px;
+    font-size: 11px;
+}
+
+.recommendation-content p {
+    margin-top: 7px;
+}
+
+.ai-explanation {
+    background: #17202a;
+    color: white;
+}
+
+.ai-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ai-header .card-label {
+    color: #bdc3c7;
+}
+
+.ai-header h3 {
+    font-size: 19px;
+}
+
+.ai-icon {
+    background: white;
+    color: #17202a;
+}
+
+.ai-text {
+    color: #ecf0f1 !important;
+    line-height: 1.7;
+    font-size: 14px !important;
+    margin-top: 20px !important;
+}
+
+.error-message {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 9px;
+    background: #fdedec;
+    color: #922b21;
+    font-size: 14px;
+}
+
+.footer {
+    text-align: center;
+    padding: 25px;
+    color: #7f8c8d;
+    font-size: 12px;
+}
+
+@media (max-width: 800px) {
+    .form-grid,
+    .summary-grid,
+    .goals-grid,
+    .goals-result-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feasibility-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .header-content {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 500px) {
+    .main-container {
+        padding: 20px 12px;
+    }
+
+    .input-section {
+        padding: 20px;
+    }
+
+    .feasibility-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feasibility-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

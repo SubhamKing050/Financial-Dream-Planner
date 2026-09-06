@@ -1,9 +1,28 @@
-venv/
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
+# Virtual environment
+fp/
+
+# Machine learning generated files
+*.pkl
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Environment files
 .env
 
-Models/*.pkl
+# Logs
+*.log
 
-RAG/chroma_db/
+# OS files
+.DS_Store
+Thumbs.db
+
+# Keep the trained model
+!best_salary_model.pkl

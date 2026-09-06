@@ -6,6 +6,5 @@ fastapi
 uvicorn
 pydantic
 ollama
-sentence-transformers
-chromadb
 python-dotenv
+requests

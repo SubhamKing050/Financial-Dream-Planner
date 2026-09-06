@@ -1,191 +1,265 @@
-import pandas as pd
+# ==========================================
+# MONTHLY INVESTMENT CALCULATOR
+# ==========================================
 
 
 # ==========================================
 # CONFIGURATION
 # ==========================================
 
-DATA_PATH = "Data/city_goal_costs.csv"
-
-# Assignment requirement:
-# 0.06% annual inflation
-INFLATION_RATE = 0.0006
+# Expected annual investment return
+# Used only for educational calculation
+EXPECTED_ANNUAL_RETURN = 0.08
 
 
 # ==========================================
-# LOAD DATASET
+# CALCULATE MONTHLY INVESTMENT
 # ==========================================
 
-df = pd.read_csv(DATA_PATH)
-
-
-# ==========================================
-# FUTURE COST CALCULATION
-# ==========================================
-
-def calculate_future_cost(current_cost, years):
-    """
-    Calculate the future cost of a goal using
-    the project's fixed annual inflation rate.
-
-    Formula:
-        Future Cost = Current Cost × (1 + inflation)^years
-    """
-
-    future_cost = current_cost * (
-        (1 + INFLATION_RATE) ** years
-    )
-
-    return round(future_cost, 2)
-
-
-# ==========================================
-# GET CITY COSTS
-# ==========================================
-
-def get_city_costs(city, area_type):
-    """
-    Find the current Marriage, Car and Home
-    costs for the selected city and area type.
-    """
-
-    matching_rows = df[
-        (df["City"].str.lower() == city.lower()) &
-        (df["Area_Type"].str.lower() == area_type.lower())
-    ]
-
-    if matching_rows.empty:
-        raise ValueError(
-            f"No cost data found for City='{city}' "
-            f"and Area_Type='{area_type}'."
-        )
-
-    row = matching_rows.iloc[0]
-
-    return {
-        "marriage": float(row["Marriage_Cost_Current"]),
-        "car": float(row["Car_Cost_Current"]),
-        "home": float(row["Home_Cost_Current"])
-    }
-
-
-# ==========================================
-# CALCULATE ALL FUTURE GOAL COSTS
-# ==========================================
-
-def calculate_goal_costs(
-    city,
-    area_type,
-    marriage_years=None,
-    car_years=None,
-    home_years=None
+def calculate_monthly_investment(
+    future_cost,
+    years,
+    annual_return=EXPECTED_ANNUAL_RETURN
 ):
     """
-    Calculate future costs for the selected goals.
+    Calculate the monthly investment required
+    to reach a future financial goal.
 
-    Each goal is calculated separately because
-    the timelines can be different.
+    Formula:
+
+        FV = P × [((1 + r)^n - 1) / r]
+
+    Therefore:
+
+        P = FV × r / ((1 + r)^n - 1)
+
+    Where:
+
+        FV = Future goal cost
+        P  = Monthly investment
+        r  = Monthly return rate
+        n  = Number of months
+
+    The calculation assumes monthly investments
+    and monthly compounding.
     """
 
-    current_costs = get_city_costs(
-        city,
-        area_type
-    )
-
-    result = {}
-
     # --------------------------------------
-    # Marriage
+    # Validate inputs
     # --------------------------------------
 
-    if marriage_years is not None:
+    if future_cost <= 0:
+        raise ValueError(
+            "Future cost must be greater than 0."
+        )
 
-        result["marriage"] = {
-            "current_cost": current_costs["marriage"],
-            "years": marriage_years,
-            "future_cost": calculate_future_cost(
-                current_costs["marriage"],
-                marriage_years
+    if years <= 0:
+        raise ValueError(
+            "Goal timeline must be greater than 0 years."
+        )
+
+    if annual_return < 0:
+        raise ValueError(
+            "Annual return cannot be negative."
+        )
+
+    # --------------------------------------
+    # Convert annual return to monthly return
+    # --------------------------------------
+
+    monthly_return = annual_return / 12
+
+    # --------------------------------------
+    # Calculate number of months
+    # --------------------------------------
+
+    number_of_months = years * 12
+
+    # --------------------------------------
+    # Calculate monthly investment
+    # --------------------------------------
+
+    if monthly_return == 0:
+
+        monthly_investment = (
+            future_cost / number_of_months
+        )
+
+    else:
+
+        monthly_investment = (
+            future_cost * monthly_return
+            /
+            (
+                (1 + monthly_return)
+                ** number_of_months
+                - 1
             )
-        }
+        )
 
-    # --------------------------------------
-    # Car
-    # --------------------------------------
-
-    if car_years is not None:
-
-        result["car"] = {
-            "current_cost": current_costs["car"],
-            "years": car_years,
-            "future_cost": calculate_future_cost(
-                current_costs["car"],
-                car_years
-            )
-        }
-
-    # --------------------------------------
-    # Home
-    # --------------------------------------
-
-    if home_years is not None:
-
-        result["home"] = {
-            "current_cost": current_costs["home"],
-            "years": home_years,
-            "future_cost": calculate_future_cost(
-                current_costs["home"],
-                home_years
-            )
-        }
-
-    return result
+    return round(monthly_investment, 2)
 
 
 # ==========================================
-# TEST THE FUNCTION
+# CALCULATE INVESTMENTS FOR ALL GOALS
+# ==========================================
+
+def calculate_goal_investments(goal_costs):
+    """
+    Calculate the monthly investment required
+    for every selected financial goal.
+
+    Expected input:
+
+        {
+            "marriage": {
+                "current_cost": 890000,
+                "years": 5,
+                "future_cost": 916975.00
+            },
+
+            "car": {
+                "current_cost": 1260000,
+                "years": 4,
+                "future_cost": 1290458.00
+            }
+        }
+
+    Returns the monthly investment required
+    for each goal and the total requirement.
+    """
+
+    results = {}
+
+    total_monthly_investment = 0
+
+    # --------------------------------------
+    # Calculate each goal
+    # --------------------------------------
+
+    for goal, data in goal_costs.items():
+
+        future_cost = data["future_cost"]
+        years = data["years"]
+
+        monthly_investment = (
+            calculate_monthly_investment(
+                future_cost=future_cost,
+                years=years
+            )
+        )
+
+        results[goal] = {
+
+            "future_cost":
+                future_cost,
+
+            "years":
+                years,
+
+            "monthly_investment":
+                monthly_investment
+        }
+
+        total_monthly_investment += (
+            monthly_investment
+        )
+
+    # --------------------------------------
+    # Add total investment requirement
+    # --------------------------------------
+
+    results["total"] = {
+
+        "monthly_investment":
+            round(total_monthly_investment, 2)
+    }
+
+    return results
+
+
+# ==========================================
+# TEST
 # ==========================================
 
 if __name__ == "__main__":
 
-    try:
+    # Example future goal costs
+    example_goals = {
 
-        costs = calculate_goal_costs(
-            city="Bangalore",
-            area_type="Central",
-            marriage_years=5,
-            car_years=4,
-            home_years=10
+        "marriage": {
+            "current_cost": 1000000,
+            "years": 5,
+            "future_cost": 1003000
+        },
+
+        "car": {
+            "current_cost": 800000,
+            "years": 4,
+            "future_cost": 801920
+        },
+
+        "home": {
+            "current_cost": 5000000,
+            "years": 10,
+            "future_cost": 5030000
+        }
+    }
+
+    # Calculate investments
+    investments = (
+        calculate_goal_investments(
+            example_goals
         )
+    )
 
-        print("\n==========================================")
-        print("FUTURE GOAL COST CALCULATOR")
-        print("==========================================")
+    # --------------------------------------
+    # Display results
+    # --------------------------------------
+
+    print("\n==========================================")
+    print("MONTHLY INVESTMENT CALCULATOR")
+    print("==========================================")
+
+    print(
+        f"\nExpected Annual Return: "
+        f"{EXPECTED_ANNUAL_RETURN * 100:.2f}%"
+    )
+
+    for goal, data in investments.items():
+
+        if goal == "total":
+            continue
 
         print(
-            f"\nInflation Rate: "
-            f"{INFLATION_RATE * 100:.2f}% per year"
+            f"\n{goal.upper()}"
         )
 
-        for goal, data in costs.items():
+        print(
+            f"Future Cost          : "
+            f"₹{data['future_cost']:,.2f}"
+        )
 
-            print(f"\n{goal.upper()}")
+        print(
+            f"Timeline             : "
+            f"{data['years']} years"
+        )
 
-            print(
-                f"Current Cost : "
-                f"₹{data['current_cost']:,.2f}"
-            )
+        print(
+            f"Monthly Investment   : "
+            f"₹{data['monthly_investment']:,.2f}"
+        )
 
-            print(
-                f"Timeline     : "
-                f"{data['years']} years"
-            )
+    print("\n------------------------------------------")
 
-            print(
-                f"Future Cost  : "
-                f"₹{data['future_cost']:,.2f}"
-            )
+    print(
+        f"TOTAL MONTHLY INVESTMENT: "
+        f"₹{investments['total']['monthly_investment']:,.2f}"
+    )
 
-    except ValueError as error:
+    print("------------------------------------------")
 
-        print(f"\nError: {error}")
+    print(
+        "\nNOTE: This is an educational calculation "
+        "and does not guarantee investment returns."
+    )
